@@ -2,7 +2,7 @@
     include_once "koneksi.php";
     $password = password_hash('123', PASSWORD_BCRYPT);
     // Escape the password to prevent SQL injection or errors
-    $password = mysqli_real_escape_string($koneksi, $password);
+    $password = mysqli_real_escape_string($konek, $password);
 
     $query = "INSERT INTO tbl_pengguna (
         username,
@@ -20,11 +20,11 @@
             'admin'
         )";
 
-    if ($koneksi->query($query)) {
+    if ($konek->query($query)) {
         echo "Data user berhasil di tambah";
     } else {
         // Menampilkan error SQL jika query gagal
-        echo "Data user gagal di tambah: " . $koneksi->error;
+        echo "Data user gagal di tambah: " . $konek->error;
     }
 
     mysqli_close($koneksi);

@@ -1,3 +1,34 @@
+<?php
+include_once "koneksi.php";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $invoice = $_POST['invoice'];
+    $tanggal = $_POST['tanggal'];
+    $barang = $_POST['barang'];
+    $pelanggan = $_POST['pelanggan'];
+    $jumlah = $_POST['jumlah'];
+    $harga = $_POST['harga'];
+    $total = $harga * $jumlah;
+    $keterangan = $_POST['keterangan'];
+
+    $query = "INSERT INTO penjualan (
+        Invoice ,
+        tanggal_pembayaran,
+        jumlah_pembayaran,
+        keterangan
+        ) VALUES (
+            '$invoice',
+            '$tanggal',
+            '$total',
+            '$keterangan',
+        )";
+    if (mysqli_query($konek, $query)) {
+        echo "<script>alert('Data pembelian berhasil disimpan.'); window.location.href='./dashboard.php?modul=pembayaran';</script>";
+    } else {
+        echo "Error: " . $query . "<br>" . mysqli_error($konek);
+    }
+}
+?>
 <div class="card mb-3">
     <div class="card-body">
         <form action="" method="post">
@@ -13,8 +44,13 @@
                 <div class="col-md-4">
                     <label for="barang" class="form-label">Barang</label>
                     <select name="barang" class="form-select">
-                        <option value="1">Laptop Acer</option>
-                        <option value="2">Komputer (PC)</option>
+                        <?php
+                            $query_suplier = "SELECT * FROM tbl_barang";
+                            $result_suplier = mysqli_query($konek, $query_suplier);
+                            while ($row_suplier = mysqli_fetch_assoc($result_suplier)) {
+                                echo "<option value='" . $row_suplier['barang_id'] . "'>" . $row_suplier['nama_barang'] . "</option>";
+                            }
+                        ?>
                     </select>
                 </div>
             </div>
@@ -22,8 +58,13 @@
                 <div class="col-md-4">
                     <label for="pelanggan" class="form-label">Pelanggan</label>
                     <select name="pelanggan" class="form-select">
-                        <option value="1">PT Sejahtera</option>
-                        <option value="2">CV Maju Bersama</option>
+                        <?php
+                            $query_suplier = "SELECT * FROM tbl_pelanggan";
+                            $result_suplier = mysqli_query($konek, $query_suplier);
+                            while ($row_suplier = mysqli_fetch_assoc($result_suplier)) {
+                                echo "<option value='" . $row_suplier['pelanggan_id'] . "'>" . $row_suplier['nama_pelanggan'] . "</option>";
+                            }
+                        ?>
                     </select>
                 </div>
                 <div class="col-md-2">
